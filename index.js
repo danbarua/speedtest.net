@@ -404,9 +404,21 @@ function speedTest(options){
 
     var self=new EventEmitter();
 
+    if (options.proxy){
+        options.proxy = url.parse(options.proxy);
+    }
+
     function httpOpts(theUrl){
         var o=url.parse(theUrl);
         o.headers=options.headers||{};
+
+        if (options.proxy){
+            o.headers['Host'] = o.hostname;
+            o.hostname = options.proxy.hostname
+            o.host = options.proxy.host;
+            o.port = options.proxy.port;
+        }
+
         return o;
     }
 
